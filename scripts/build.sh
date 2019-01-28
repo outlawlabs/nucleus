@@ -16,15 +16,12 @@ Usage: $0 [options]
 push_images() {
 
 	latest=$1
-	image=$2
-	hashImage=$3
-	gitBranch=$4
+	hashImage=$2
+	gitBranch=$3
 
 	echo "Pushing images: "
 	echo " + $hashImage"
 	docker push "$hashImage"
-	echo " + $image"
-	docker push "$image"
 
 	if [ "$gitBranch" == "master" ]; then
 		echo " + $latest"
