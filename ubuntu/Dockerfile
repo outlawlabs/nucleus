@@ -46,7 +46,6 @@ RUN apt-get update \
   apt-transport-https \
   locales
 
-
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
@@ -77,6 +76,12 @@ RUN set -ex \
   && which docker \
   && (docker version || true)
 
+# Install awscli
+RUN GET_PIP_URL="https://bootstrap.pypa.io/get-pip.py" \
+  && curl -O $GET_PIP_URL \
+  && python get-pip.py \
+  && pip install awscli
+
 # Install Dockerize
 ENV DOCKERIZE_VERSION v0.6.1
 RUN DOCKERIZE_URL="https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz" \
@@ -84,6 +89,23 @@ RUN DOCKERIZE_URL="https://github.com/jwilder/dockerize/releases/download/${DOCK
   && tar -C /usr/local/bin -xzvf /tmp/dockerize-linux-amd64.tar.gz \
   && rm -rf /tmp/dockerize-linux-amd64.tar.gz \
   && dockerize --version
+
+# Install kubectl
+ENV KUBECTL_VERSION v1.13.0
+RUN KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" \
+  && curl -LO $KUBECTL_URL \
+  && chmod +x ./kubectl \
+  && mv ./kubectl /usr/bin/kubectl
+
+# Install helm
+ENV HELM_VERSION v2.12.3
+RUN HELM_URL="https://storage.googleapis.com/kubernetes-helm/helm-$HELM_VERSION-linux-amd64.tar.gz" \
+  && curl --silent --show-error --location --fail --retry 3 --output /tmp/helm.tar.gz $HELM_URL \
+  && tar -C /usr/local/bin -xzvf /tmp/helm.tar.gz \
+  && mv /usr/local/bin/linux-amd64/helm /usr/local/bin/helm \
+  && chmod +x /usr/local/bin/helm \
+  && rm -rf /tmp/helm.tar.gz \
+  && rm -rf /usr/local/bin/linux-amd64
 
 RUN groupadd --gid 3434 outlaws \
   && useradd --uid 3434 --gid outlaws --shell /bin/bash --create-home outlaws \
