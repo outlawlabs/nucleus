@@ -2,7 +2,12 @@ workflows:
   version: 2
   main:
     jobs:
-      - build:
+      - build-go:
+          context: org-global
+          filters:
+            branches:
+              only: master
+      - build-ubuntu:
           context: org-global
           filters:
             branches:
@@ -10,7 +15,7 @@ workflows:
 
 version: 2
 jobs:
-  build:
+  build-go:
     docker:
       - image: cibuilds/docker:18.09
     steps:
@@ -26,6 +31,19 @@ jobs:
       - run:
           name: 'Build Ubuntu Docker Images'
           command: ./scripts/build.sh --base go
+  build-ubuntu:
+    docker:
+      - image: cibuilds/docker:18.09
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      # Temporary -- need to have a Docker build image with bash installed.
+      - run: apk add --update --no-cache bash
+      - run:
+          name: 'Docker Login'
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run:
           name: 'Build Go Docker Image'
           command: ./scripts/build.sh --base ubuntu
