@@ -62,7 +62,7 @@ RUN JQ_URL="https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-li
   && curl --silent --show-error --location --fail --retry 3 --output /usr/bin/jq $JQ_URL \
   && chmod +x /usr/bin/jq \
   && jq --version
-
+ 
 # Install Docker
 RUN set -ex \
   && export DOCKER_VERSION=$(curl --silent --fail --retry 3 https://download.docker.com/linux/static/stable/x86_64/ | grep -o -e 'docker-[.0-9]*-ce\.tgz' | sort -r | head -n 1) \
@@ -81,6 +81,13 @@ RUN GET_PIP_URL="https://bootstrap.pypa.io/get-pip.py" \
   && curl -O $GET_PIP_URL \
   && python get-pip.py \
   && pip install awscli
+
+# Install gcloud
+RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
+  && echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+  && apt-get update -y \
+  && apt-get install google-cloud-sdk -y
 
 # Install Dockerize
 ENV DOCKERIZE_VERSION v0.6.1
