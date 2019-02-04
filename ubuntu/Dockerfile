@@ -44,6 +44,8 @@ RUN apt-get update \
   wget \
   lsb-release \
   apt-transport-https \
+  software-properties-common \
+  dirmngr \
   locales
 
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
@@ -62,7 +64,7 @@ RUN JQ_URL="https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-li
   && curl --silent --show-error --location --fail --retry 3 --output /usr/bin/jq $JQ_URL \
   && chmod +x /usr/bin/jq \
   && jq --version
- 
+
 # Install Docker
 RUN set -ex \
   && export DOCKER_VERSION=$(curl --silent --fail --retry 3 https://download.docker.com/linux/static/stable/x86_64/ | grep -o -e 'docker-[.0-9]*-ce\.tgz' | sort -r | head -n 1) \
@@ -88,6 +90,13 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
   && apt-get update -y \
   && apt-get install google-cloud-sdk -y
+
+# Install az (azure cli)
+RUN export AZ_REPO=$(lsb_release -c -s) \
+  && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee -a /etc/apt/sources.list.d/azure-cli.list \
+  && apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF \
+  && apt-get update -y \
+  && apt-get install azure-cli -y
 
 # Install Dockerize
 ENV DOCKERIZE_VERSION v0.6.1
