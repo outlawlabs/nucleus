@@ -4,7 +4,7 @@
 # See https://github.com/CircleCI-Public/example-images/blob/973db598d36cb48fdf4d19716582e79465e0edc4/golang/Dockerfile
 # for more information.
 
-FROM golang:1.11.5
+FROM golang:1.12.1
 
 ARG GIT_BRANCH=unknown
 ARG GIT_COMMIT=unknown
@@ -19,7 +19,7 @@ LABEL \
   net.outlab-labs.git.commit=${GIT_COMMIT} \
   net.outlab-labs.git.url=${GIT_URL} \
   net.outlab-labs.maintainers=${MAINTAINERS} \
-  net.outlab-labs.image.description="Dockerized Ubuntu 18.04 base image"
+  net.outlab-labs.image.description="Dockerized Go 1.12.1 base image"
 
 # make Apt non-interactive
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \

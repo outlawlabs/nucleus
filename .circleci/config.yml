@@ -12,8 +12,13 @@ workflows:
           filters:
             branches:
               only: master
+      - build-node:
+          context: org-global
+          filters:
+            branches:
+              only: master
 
-version: 2
+version: 2.1
 jobs:
   build-go:
     docker:
@@ -29,7 +34,7 @@ jobs:
           command: |
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run:
-          name: 'Build Ubuntu Docker Images'
+          name: 'Build Go Docker Images'
           command: ./scripts/build.sh --base go
   build-ubuntu:
     docker:
@@ -45,5 +50,21 @@ jobs:
           command: |
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run:
-          name: 'Build Go Docker Image'
+          name: 'Build Ubuntu Docker Image'
           command: ./scripts/build.sh --base ubuntu
+  build-node:
+    docker:
+      - image: cibuilds/docker:18.09
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      # Temporary -- need to have a Docker build image with bash installed.
+      - run: apk add --update --no-cache bash
+      - run:
+          name: 'Docker Login'
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: 'Build NodeJS Docker Image'
+          command: ./scripts/build.sh --base node
