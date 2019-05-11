@@ -4,7 +4,7 @@
 # See https://github.com/CircleCI-Public/example-images/blob/973db598d36cb48fdf4d19716582e79465e0edc4/golang/Dockerfile
 # for more information.
 
-FROM golang:1.12.1
+FROM golang:1.12.5
 
 ARG GIT_BRANCH=unknown
 ARG GIT_COMMIT=unknown
