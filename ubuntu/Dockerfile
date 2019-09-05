@@ -114,7 +114,7 @@ RUN KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/$KUBE
   && mv ./kubectl /usr/bin/kubectl
 
 # Install helm
-ENV HELM_VERSION v2.12.3
+ENV HELM_VERSION v2.14.0
 RUN HELM_URL="https://storage.googleapis.com/kubernetes-helm/helm-$HELM_VERSION-linux-amd64.tar.gz" \
   && curl --silent --show-error --location --fail --retry 3 --output /tmp/helm.tar.gz $HELM_URL \
   && tar -C /usr/local/bin -xzvf /tmp/helm.tar.gz \
@@ -122,6 +122,22 @@ RUN HELM_URL="https://storage.googleapis.com/kubernetes-helm/helm-$HELM_VERSION-
   && chmod +x /usr/local/bin/helm \
   && rm -rf /tmp/helm.tar.gz \
   && rm -rf /usr/local/bin/linux-amd64
+
+# Install terragrunt
+ENV TERRAGRUNT_VERSION v0.19.23
+RUN TERRAGRUNT_URL="https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64" \
+  && curl -L $TERRAGRUNT_URL -o terragrunt \
+  && chmod +x ./terragrunt \
+  && mv ./terragrunt /usr/local/bin/terragrunt
+
+# Install terraform
+ENV TERRAFORM_VERSION 0.12.7
+RUN TERRAFORM_URL="https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip" \
+  && curl -LO $TERRAFORM_URL \
+  && unzip "terraform_$TERRAFORM_VERSION_linux_amd64.zip" \
+  && chmod +x ./terraform \
+  && mv ./terraform /usr/local/bin/terraform \
+  && rm "terraform_$TERRAFORM_VERSION_linux_amd64.zip"
 
 RUN groupadd --gid 3434 outlaws \
   && useradd --uid 3434 --gid outlaws --shell /bin/bash --create-home outlaws \
