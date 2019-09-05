@@ -131,13 +131,13 @@ RUN TERRAGRUNT_URL="https://github.com/gruntwork-io/terragrunt/releases/download
   && mv ./terragrunt /usr/local/bin/terragrunt
 
 # Install terraform
-ENV TERRAFORM_VERSION 0.12.7
-RUN TERRAFORM_URL="https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip" \
+ENV TERRAFORM_VERSION 0.12.8
+RUN TERRAFORM_URL="https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip" \
   && curl -LO $TERRAFORM_URL \
-  && unzip "terraform_$TERRAFORM_VERSION_linux_amd64.zip" \
+  && unzip "terraform_"$TERRAFORM_VERSION"_linux_amd64.zip" \
   && chmod +x ./terraform \
   && mv ./terraform /usr/local/bin/terraform \
-  && rm "terraform_$TERRAFORM_VERSION_linux_amd64.zip"
+  && rm "terraform_"$TERRAFORM_VERSION"_linux_amd64.zip"
 
 RUN groupadd --gid 3434 outlaws \
   && useradd --uid 3434 --gid outlaws --shell /bin/bash --create-home outlaws \
