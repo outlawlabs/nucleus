@@ -4,6 +4,21 @@
 
 FROM python:3.7.4
 
+ARG GIT_BRANCH=unknown
+ARG GIT_COMMIT=unknown
+ARG GIT_URL=unknown
+ARG BUILD_NUMBER=unknown
+ARG BUILD_DATE=unknown
+ARG MAINTAINERS="outlaws@outlab-labs.net"
+LABEL \
+  net.outlab-labs.build.date=${BUILD_DATE} \
+  net.outlab-labs.build.number=${BUILD_NUMBER} \
+  net.outlab-labs.git.branch=${GIT_BRANCH} \
+  net.outlab-labs.git.commit=${GIT_COMMIT} \
+  net.outlab-labs.git.url=${GIT_URL} \
+  net.outlab-labs.maintainers=${MAINTAINERS} \
+  net.outlab-labs.image.description="Dockerized Python 3.7.4 base image"
+
 # make Apt non-interactive
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \
   && echo 'DPkg::Options "--force-confnew";' >> /etc/apt/apt.conf.d/90circleci
