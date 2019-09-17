@@ -16,6 +16,11 @@ workflows:
           context: org-global
           filters:
             branches:
+              only:
+      - build-python:
+          context: org-global
+          filters:
+            branches:
               only: master
 
 version: 2.1
@@ -68,3 +73,19 @@ jobs:
       - run:
           name: 'Build NodeJS Docker Image'
           command: ./scripts/build.sh --base node
+  build-python:
+    docker:
+      - image: cibuilds/docker:18.09
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      # Temporary -- need to have a Docker build image with bash installed.
+      - run: apk add --update --no-cache bash
+      - run:
+          name: 'Docker Login'
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: 'Build Python3 Docker Image'
+          command: ./scripts/build.sh --base python
