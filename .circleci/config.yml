@@ -30,8 +30,7 @@ jobs:
       - image: cibuilds/docker:18.09
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       # Temporary -- need to have a Docker build image with bash installed.
       - run: apk add --update --no-cache bash
       - run:
@@ -46,8 +45,7 @@ jobs:
       - image: cibuilds/docker:18.09
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       # Temporary -- need to have a Docker build image with bash installed.
       - run: apk add --update --no-cache bash
       - run:
@@ -62,8 +60,7 @@ jobs:
       - image: cibuilds/docker:18.09
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       # Temporary -- need to have a Docker build image with bash installed.
       - run: apk add --update --no-cache bash
       - run:
@@ -78,8 +75,7 @@ jobs:
       - image: cibuilds/docker:18.09
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       # Temporary -- need to have a Docker build image with bash installed.
       - run: apk add --update --no-cache bash
       - run:
