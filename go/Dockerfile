@@ -4,7 +4,7 @@
 # See https://github.com/CircleCI-Public/example-images/blob/973db598d36cb48fdf4d19716582e79465e0edc4/golang/Dockerfile
 # for more information.
 
-FROM golang:1.13.0
+FROM golang:1.14.6
 
 ARG GIT_BRANCH=unknown
 ARG GIT_COMMIT=unknown
@@ -94,7 +94,7 @@ RUN groupadd --gid 3434 circleci \
 
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | INSTALL_DIRECTORY=/usr/local/bin sh
 
-RUN curl -sSL https://github.com/gotestyourself/gotestsum/releases/download/v0.3.1/gotestsum_0.3.1_linux_amd64.tar.gz | \
+RUN curl -sSL https://github.com/gotestyourself/gotestsum/releases/download/v0.5.2/gotestsum_0.5.2_linux_amd64.tar.gz | \
   tar -xz -C /usr/local/bin gotestsum
 
 RUN git clone https://github.com/magefile/mage \
